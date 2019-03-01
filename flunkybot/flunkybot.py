@@ -11,13 +11,20 @@ from telegram.ext import (
 )
 
 from flunkybot.config import config
+from flunkybot.models.user import User
+from flunkybot.db import get_session
 # from flunkybot.helper.session import session_wrapper
 from flunkybot.helper.telegram import call_tg_func
 
 
 def start(bot, update):
     """Send a help text."""
-    print(update)
+    tg_user = update.message.from_user
+
+    session = get_session()
+    new_user = User(tg_user.id, tg_user.username)
+    session.add(new_user)
+    session.commit()
 
 
 def send_help_text(bot, update):
